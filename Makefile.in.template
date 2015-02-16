@@ -1,0 +1,8 @@
+#Makefile.in for GeoByGeo
+
+#This file contains the user-specified build options and is machine-specific.
+
+#Compile flags
+USE_DEBUG = 1  # Compile with symbol table and all warnings
+USE_OPT   = 0  # Compile with optimization.
+
