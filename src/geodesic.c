@@ -73,11 +73,11 @@ void geo_xudot(double t, double *xu, void *args, double *xudot)
     geo_dHdQ(t, x, u, args, udot);
 }
 
-void geo_integrate_generic(double *x0, double *u0, double t0, double t1,
-                            double dt0, void *args,
-                            void (*step)(double, double*, double*, int, void*,
-                                void (*)(double,double*,void*,double*)),
-                            char filename[])
+void geo_integrate_generic(double *x0, double *u0, double *x, double *u,
+                           double t0, double t1, double dt0, void *args,
+                           double (*step)(double, double*, double*, int, void*,
+                             void (*)(double,double*,void*,double*)),
+                           char filename[])
 {
     // Integrate a geodesic with initial data x^mu=x0, u_mu=u0 from t0 to t1.
     // Begin with timestep dt0, and use 'step' integrator.
@@ -96,15 +96,28 @@ void geo_integrate_generic(double *x0, double *u0, double t0, double t1,
     dt = dt0;
    
     //TODO: set n_args?
-    output_print_init((double *)args, 0, filename);
-    output_print_step(t, xu, 8, filename);
+    if(filename != NULL)
+    {
+        output_print_init((double *)args, 0, filename);
+        output_print_step(t, xu, 8, filename);
+    }
 
     while(t < t1)
     {
-        step(t, xu, &dt, 8, args, &geo_xudot);
-        t += dt;
+        dt0 = step(t, xu, &dt, 8, args, &geo_xudot);
+        t += dt0;
 
-        output_print_step(t, xu, 8, filename);
+        if(filename != NULL)
+            output_print_step(t, xu, 8, filename);
+        for(i=0; i<8; i++)
+            if(xu[i] != xu[i])
+                t = t1;
+    }
+
+    for(i=0; i<4; i++)
+    {
+        x[i] = xu[i];
+        u[i] = xu[4+i];
     }
 
     free(xu);

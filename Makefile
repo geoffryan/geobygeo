@@ -4,11 +4,13 @@ MAKEFILE_IN = $(PWD)/Makefile.in
 include $(MAKEFILE_IN)
 
 APP      = geobygeo
+VISAPP   = geovis
 
 SRCEXT   = c
 SRCDIR   = src
 OBJDIR   = obj
 BINDIR   = bin
+VISDIR   = vis
 
 SRCS    := $(shell find $(SRCDIR) -name '*.$(SRCEXT)')
 SRCDIRS := $(shell find . -name '*.$(SRCEXT)' -exec dirname {} \; | uniq)
@@ -32,7 +34,10 @@ endif
 .PHONY: all clean distclean
 
 
-all: $(BINDIR)/$(APP)
+all: $(BINDIR)/$(APP) $(VISDIR)/$(BINDIR)/$(VISAPP)
+
+$(VISDIR)/$(BINDIR)/$(VISAPP): .FORCE
+	$(MAKE) -C $(VISDIR)
 
 $(BINDIR)/$(APP): buildrepo $(OBJS)
 	@mkdir -p `dirname $@`
@@ -45,6 +50,7 @@ $(OBJDIR)/%.o: %.$(SRCEXT)
 
 clean:
 	$(RM) -r $(OBJDIR)
+	$(MAKE) -C $(VISDIR) clean
 
 distclean: clean
 	$(RM) -r $(BINDIR)
@@ -58,3 +64,5 @@ define make-repo
 	mkdir -p $(OBJDIR)/$$dir; \
    done
 endef
+
+.FORCE: 

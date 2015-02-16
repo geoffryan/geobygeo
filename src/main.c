@@ -9,36 +9,50 @@ int main(int argc, char *argv[])
 {
     int n = 200;
 
-    metric_ig  = &metric_ig_flat_sph;
-    metric_dig = &metric_dig_flat_sph;
+    metric_ig  = &metric_ig_schw_sc;
+    metric_dig = &metric_dig_schw_sc;
 
-    double x0[4];
-    double u0[4];
+    double args[1];
+    args[0] = 1.0;
 
-    double r = 0.2;
-    double b = 0.1;
-    double v = 0.01;
+    double x0[4], u0[4], x[4], u[4];
+    double t0, t1;
 
-    x0[0] = 0.0;
-    x0[1] = 1.0;
-    x0[2] = asin(b/r);
-    x0[3] = 0.0;
+    double r0 = 3.0;
+    double r1 = 10.0;
 
-    u0[0] = -1.0/sqrt(1.0-v*v);
-    u0[1] = 0.0;
-    u0[2] = 0.0;
-    u0[3] = b*v;
+    int i,j;
+    int nr, np;
+    nr = 20;
+    np = 16;
 
-    geo_integrate_generic(x0, u0, 0.0, 4.0, 0.01, NULL, &forward_euler, 
-                            "fe.txt");
-    geo_integrate_generic(x0, u0, 0.0, 4.0, 0.01, NULL, &rk2, 
-                            "rk2.txt");
-    geo_integrate_generic(x0, u0, 0.0, 4.0, 0.01, NULL, &rk4, 
-                            "rk4.txt");
+    for(i=0; i<nr; i++)
+    {
+        double r = r0 + i*((r1-r0)/(nr-1));
+        double ut = -0.1;
+        double up = 0.2;
+        double ur = 0.0;
+        double u00 = sqrt(ur*ur + (ut*ut+up*up)/(r*r));
+        for(j=0; j<np; j++)
+        {
+            x0[0] = 0.0;
+            x0[1] = r;
+            x0[2] = 0.5*M_PI;
+            x0[3] = j*(2.0*M_PI/np);
+            u0[0] = u00;
+            u0[1] = ur;
+            u0[2] = ut;
+            u0[3] = up;
 
-    //test_oscillator(&forward_euler, 0.0, 4.25*M_PI, n);
-    //test_oscillator(&rk2, 0.0, 4.25*M_PI, n);
-    //test_oscillator(&rk4, 0.0, 4.25*M_PI, n);
+            char outname[128];
+            sprintf(outname, "out_schw_%d_%d.txt", i, j);
+            printf("Running %s...\n", outname);
+            geo_integrate_generic(x0, u0, x, u, 0.0, 1000.0, 0.1, args, 
+                                    &dopr54, outname);
+        }
+
+        
+    }
 
     return 0;
 }

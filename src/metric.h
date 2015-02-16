@@ -22,5 +22,7 @@ void  metric_ig_flat_cart(double *g, double *x, void *args);
 void metric_dig_flat_cart(double *dg, double *x, void *args);
 void  metric_ig_flat_sph(double *g, double *x, void *args);
 void metric_dig_flat_sph(double *dg, double *x, void *args);
+void  metric_ig_schw_sc(double *g, double *x, void *args);
+void metric_dig_schw_sc(double *dg, double *x, void *args);
 
 #endif
