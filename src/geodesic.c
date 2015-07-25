@@ -122,3 +122,61 @@ void geo_integrate_generic(double *x0, double *u0, double *x, double *u,
 
     free(xu);
 }
+
+void geo_integrate_surface(double *x0, double *u0, double *x, double *u,
+                           double t0, double t1, double dt0, int mu, double C,
+                           void *args,
+                           double (*step)(double, double*, double*, int, void*,
+                             void (*)(double,double*,void*,double*)),
+                           char filename[])
+{
+    // Integrate a geodesic with initial data x^mu=x0, u_mu=u0 until it hits
+    // surface x[mu] = C. Ends also if t > t1.
+    // Begin with timestep dt0, and use 'step' integrator.
+    
+    int i;
+    double t, dt;
+    double *xu = (double *) malloc(8 * sizeof(double));
+
+    for(i=0; i<4; i++)
+    {
+        xu[i] = x0[i];
+        xu[4+i] = u0[i];
+    }
+
+    t = t0;
+    dt = dt0;
+   
+    //TODO: set n_args?
+    if(filename != NULL)
+    {
+        output_print_init((double *)args, 0, filename);
+        output_print_step(t, xu, 8, filename);
+    }
+
+    double xu0[8];
+
+    while(((x0[mu] < C && xu[mu] < C) || (x0[mu] > C && xu[mu] > C)) && t < t1)
+    {
+        dt0 = step(t, xu, &dt, 8, args, &geo_xudot);
+        t += dt0;
+
+        if(filename != NULL)
+            output_print_step(t, xu, 8, filename);
+        for(i=0; i<8; i++)
+            if(xu[i] != xu[i])
+                t = t1;
+        for(i=0; i<8; i++)
+            xu0[i] = xu[i];
+    }
+
+    double w = (C-xu0[mu]) / (xu[mu]-xu0[mu]);
+
+    for(i=0; i<4; i++)
+    {
+        x[i] = (1.0-w)*xu0[i] + w*xu[i];
+        u[i] = (1.0-w)*xu0[4+i] + w*xu[4+i];
+    }
+
+    free(xu);
+}

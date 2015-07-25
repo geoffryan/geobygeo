@@ -19,3 +19,19 @@ void metric_dig_flat_cart(double *dg, double *x, void *args)
     for(i=0; i<64; i++)
         dg[i] = 0.0;
 }
+
+void metric_cart2coord_flat_cart(double *xc, double *x, void *args)
+{
+    int i;
+    for(i=0; i<4; i++)
+        x[i] = xc[i];
+}
+
+void metric_vec2coordb_flat_cart(double *x, double *uc, double *u, void *args)
+{
+    int i;
+
+    u[0] = -uc[0];
+    for(i=1; i<4; i++)
+        u[i] = uc[i];
+}

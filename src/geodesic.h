@@ -10,5 +10,11 @@ void geo_integrate_generic(double *x0, double *u0, double *x, double *u,
                            double (*step)(double, double*, double*, int, void*,
                                 void (*)(double,double*,void*,double*)),
                            char filename[]);
+void geo_integrate_surface(double *x0, double *u0, double *x, double *u,
+                           double t0, double t1, double dt0, int mu, double C,
+                           void *args,
+                           double (*step)(double, double*, double*, int, void*,
+                             void (*)(double,double*,void*,double*)),
+                           char filename[]);
 
 #endif

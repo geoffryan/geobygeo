@@ -11,6 +11,8 @@ int main(int argc, char *argv[])
 
     metric_ig  = &metric_ig_schw_sc;
     metric_dig = &metric_dig_schw_sc;
+    metric_cart2coord = &metric_cart2coord_schw_sc;
+    metric_vec2coordb = &metric_vec2coordb_schw_sc;
 
     double args[1];
     args[0] = 1.0;
