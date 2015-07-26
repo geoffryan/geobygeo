@@ -134,9 +134,9 @@ void geo_integrate_surface(double *x0, double *u0, double *x, double *u,
     // surface x[mu] = C. Ends also if t > t1.
     // Begin with timestep dt0, and use 'step' integrator.
     
-    int i;
+    int i, j;
     double t, dt;
-    double *xu = (double *) malloc(8 * sizeof(double));
+    double xu[8];
 
     for(i=0; i<4; i++)
     {
@@ -156,8 +156,12 @@ void geo_integrate_surface(double *x0, double *u0, double *x, double *u,
 
     double xu0[8];
 
-    while(((x0[mu] < C && xu[mu] < C) || (x0[mu] > C && xu[mu] > C)) && t < t1)
+    while(((x0[mu] < C && xu[mu] < C) || (x0[mu] > C && xu[mu] > C)) && t > t1
+            && !metric_shadow(xu, args))
     {
+        for(i=0; i<8; i++)
+            xu0[i] = xu[i];
+
         dt0 = step(t, xu, &dt, 8, args, &geo_xudot);
         t += dt0;
 
@@ -166,17 +170,39 @@ void geo_integrate_surface(double *x0, double *u0, double *x, double *u,
         for(i=0; i<8; i++)
             if(xu[i] != xu[i])
                 t = t1;
-        for(i=0; i<8; i++)
-            xu0[i] = xu[i];
+
+        double g[16];
+        metric_ig(g, xu, args);
+        double sum = 0.0;
+        double sum2 = xu[4]*xu[4]*g[0];
+        for(i=1; i<4; i++)
+            for(j=1; j<4; j++)
+                sum += g[4*i+j]*xu[4+i]*xu[4+j];
+        for(i=1; i<4; i++)
+            sum += 2*g[i]*xu[4]*xu[4+i];
+
+    //    printf("%g %lg %lg %lg\n", t, xu[1], sum+sum2, sum/sum2);
+
+//        printf("%g %g %g %g %g %g %g %g %g %g\n", t, dt0, xu[0], xu[1], xu[2], xu[3],
+ //xu[4], xu[5], xu[6], xu[7]);
     }
 
-    double w = (C-xu0[mu]) / (xu[mu]-xu0[mu]);
-
-    for(i=0; i<4; i++)
+    if(t > t1 && !metric_shadow(xu, args))
     {
-        x[i] = (1.0-w)*xu0[i] + w*xu[i];
-        u[i] = (1.0-w)*xu0[4+i] + w*xu[4+i];
-    }
+        double w = (C-xu0[mu]) / (xu[mu]-xu0[mu]);
 
-    free(xu);
+        for(i=0; i<4; i++)
+        {
+            x[i] = (1.0-w)*xu0[i] + w*xu[i];
+            u[i] = (1.0-w)*xu0[4+i] + w*xu[4+i];
+        }
+    }
+    else
+    {
+        for(i=0; i<4; i++)
+        {
+            x[i] = 0.0;
+            u[i] = 0.0;
+        }
+    }
 }

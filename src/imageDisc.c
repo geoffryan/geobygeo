@@ -27,14 +27,15 @@ void imageDisc(double center[], double n[], double width, double height,
     double ny[3];
     double nz[3];
     
-    double norm = sqrt(nz[0]*nz[0] + nz[1]*nz[1] + nz[2]*nz[2]);
-    nz[0] /= norm;
-    nz[1] /= norm;
-    nz[2] /= norm;
+    double norm = sqrt(n[0]*n[0] + n[1]*n[1] + n[2]*n[2]);
+
+    nz[0] = n[0]/norm;
+    nz[1] = n[1]/norm;
+    nz[2] = n[2]/norm;
 
     nx[0] = 1.0;
-    nx[1] = 0.0;
-    nx[2] = -nx[0]*n[0]/n[2];
+    nx[1] = nz[1] != 0.0 ? -nx[0]*nz[0]/nz[1] : 0.0;
+    nx[2] = 0.0;
     norm = sqrt(nx[0]*nx[0] + nx[1]*nx[1] + nx[2]*nx[2]);
     nx[0] /= norm;
     nx[1] /= norm;
@@ -65,15 +66,20 @@ void imageDisc(double center[], double n[], double width, double height,
             metric_cart2coord(xc, x, args);
             metric_vec2coordb(x, uc, u, args);
 
-
             double l = fabs(center[1])+fabs(center[2])+fabs(center[3]);
             double t0 = 0.0;
-            double t1 = -1000.0 * l;
+            double t1 = -10.0 * l;
             double dt0 = -l/1000.0;
 
+            printf("xc = %g %g %g %g\n", xc[0], xc[1], xc[2], xc[3]);
+            printf("x  = %g %g %g %g\n", x[0], x[1], x[2], x[3]);
+            printf("uc = %g %g %g %g\n", uc[0], uc[1], uc[2], uc[3]);
+            printf("u  = %g %g %g %g\n", u[0], u[1], u[2], u[3]);
 
+            char rayname[80];
+            sprintf(rayname, "ray_%d_%d.txt", i, j);
             geo_integrate_surface(x, u, x1, u1, t0, t1, dt0, 2, 0.5*M_PI, args,
-                                    &dopr54, NULL);
+                                    &dopr54, rayname);
 
             int ind = 16 * (NY*i + j);
             for(k=0; k<4; k++)
@@ -100,6 +106,7 @@ void imageDisc(double center[], double n[], double width, double height,
                 fprintf(f, " %.12lg", dat[ind+k]);
             fprintf(f, "\n");
         }
+    fclose(f);
 
     free(dat);
 }

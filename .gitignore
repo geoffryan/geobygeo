@@ -10,3 +10,4 @@ bin*
 Makefile.in
 *.txt
 *.dat
+data/

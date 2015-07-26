@@ -475,7 +475,7 @@ void gv_draw_cutplanes()
     
     //gv_wirecube(1.0f);
     glColor3f(0.0f, 0.0f, 0.0f);
-    glutSolidSphere(2.0f,32, 32);
+//    glutSolidSphere(2.0f,32, 32);
     
     glEnable(GL_TEXTURE_2D);
     

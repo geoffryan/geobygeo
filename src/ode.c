@@ -94,6 +94,9 @@ double dopr54(double t, double *x, double *dt, int n, void *args,
 {
     // Dormand-Prince 4/5'th order RK method with adaptive step sizing.
     // Updates 'x' in place.
+        
+    double atol = 1.0e-10;
+    double rtol = 1.0e-10;
     
     int i;
     double *k1 = (double *) malloc(n * sizeof(double));
@@ -203,8 +206,6 @@ double dopr54(double t, double *x, double *dt, int n, void *args,
         }
 
         err = 0.0;
-        double atol = 1.0e-10;
-        double rtol = 1.0e-10;
         double xm;
 
         for(i=0; i<n; i++)
@@ -214,7 +215,10 @@ double dopr54(double t, double *x, double *dt, int n, void *args,
                     / ((atol+xm*rtol)*(atol+xm*rtol));
         }
         err = sqrt(err/n);
-        dt1 = 0.9 * dt0 * pow(err, -0.2);
+        if(err > 0.0)
+            dt1 = 0.9 * dt0 * pow(err, -0.2);
+        else
+            dt1 = 2.0*dt0;
     }
 
     *dt = dt1;
@@ -241,3 +245,4 @@ double dopr54(double t, double *x, double *dt, int n, void *args,
 
     return dt0;
 }
+

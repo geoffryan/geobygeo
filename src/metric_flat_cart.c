@@ -35,3 +35,8 @@ void metric_vec2coordb_flat_cart(double *x, double *uc, double *u, void *args)
     for(i=1; i<4; i++)
         u[i] = uc[i];
 }
+
+int metric_shadow_flat_cart(double *x, void *args)
+{
+    return 0;
+}

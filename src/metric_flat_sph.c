@@ -70,3 +70,8 @@ void metric_vec2coordb_flat_sph(double *x, double *uc, double *u, void *args)
     u[2] *= r;
     u[3] *= r*sint;
 }
+
+int metric_shadow_flat_sph(double *x, void *args)
+{
+    return 0;
+}

@@ -19,20 +19,30 @@ void  (*metric_ig)(double *, double *, void *);
 void (*metric_dig)(double *, double *, void *);
 void (*metric_cart2coord)(double *, double *, void *);
 void (*metric_vec2coordb)(double *, double *, double *, void *);
+int (*metric_shadow)(double *, void *);
 
 void  metric_ig_flat_cart(double *g, double *x, void *args);
 void metric_dig_flat_cart(double *dg, double *x, void *args);
-void metric_cart2coord_flat_cart(double *, double *, void *);
-void metric_vec2coordb_flat_cart(double *, double *, double *, void *);
+void metric_cart2coord_flat_cart(double *xc, double *x, void *args);
+void metric_vec2coordb_flat_cart(double *x, double *uc, double *u, void *args);
+int metric_shadow_flat_cart(double *x, void *args);
 
 void  metric_ig_flat_sph(double *g, double *x, void *args);
 void metric_dig_flat_sph(double *dg, double *x, void *args);
-void metric_cart2coord_flat_sph(double *, double *, void *);
-void metric_vec2coordb_flat_sph(double *, double *, double *, void *);
+void metric_cart2coord_flat_sph(double *xc, double *x, void *args);
+void metric_vec2coordb_flat_sph(double *x, double *uc, double *u, void *args);
+int metric_shadow_flat_cart(double *x, void *args);
 
 void  metric_ig_schw_sc(double *g, double *x, void *args);
 void metric_dig_schw_sc(double *dg, double *x, void *args);
-void metric_cart2coord_schw_sc(double *, double *, void *);
-void metric_vec2coordb_schw_sc(double *, double *, double *, void *);
+void metric_cart2coord_schw_sc(double *xc, double *x, void *args);
+void metric_vec2coordb_schw_sc(double *x, double *uc, double *u, void *args);
+int metric_shadow_schw_sc(double *x, void *args);
+
+void  metric_ig_schw_ks(double *g, double *x, void *args);
+void metric_dig_schw_ks(double *dg, double *x, void *args);
+void metric_cart2coord_schw_ks(double *xc, double *x, void *args);
+void metric_vec2coordb_schw_ks(double *x, double *uc, double *u, void *args);
+int metric_shadow_schw_ks(double *x, void *args);
 
 #endif
