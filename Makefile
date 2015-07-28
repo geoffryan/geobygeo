@@ -21,7 +21,6 @@ OPT      = -O3
 INCLUDES = 
 CFLAGS   = -c $(INCLUDES)
 LDFLAGS  = -lm -lz
-CC       = gcc
 
 ifeq ($(strip $(USE_DEBUG)), 1)
 	CFLAGS += $(DEBUG)
