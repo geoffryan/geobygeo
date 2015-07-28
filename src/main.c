@@ -16,25 +16,32 @@ int main(int argc, char *argv[])
     metric_vec2coordb = &metric_vec2coordb_schw_ks;
     metric_shadow = &metric_shadow_schw_ks;
     
-   /* 
+/*   
     metric_ig  = &metric_ig_flat_sph;
     metric_dig = &metric_dig_flat_sph;
     metric_cart2coord = &metric_cart2coord_flat_sph;
     metric_vec2coordb = &metric_vec2coordb_flat_sph;
-    */
+    metric_shadow = &metric_shadow_schw_ks;
+*/
+
+
+    
     double c[4], n[3];
+
+    double inclination = M_PI/3.0;
+
     c[0] = 0.0;
     c[1] = 0.0;
-    c[2] = 1.0e5;
-    c[3] = 1.0e5;
+    c[2] = 1.4e5 * cos(inclination);
+    c[3] = 1.4e5 * sin(inclination);
     n[0] = 0.0;
-    n[1] = 1.0;
-    n[2] = 1.0;
+    n[1] = 1.0 * cos(inclination);
+    n[2] = 1.0 * sin(inclination);
 
     double args[1];
     args[0] = 1.0;
 
-    imageDisc(c, n, 20.0, 20.0, 400, 400, args, "disc_im_flat.txt");
+    imageDisc(c, n, 80.0, 80.0, 800, 800, args, "disc_im_60_schw_ks_800_800.txt");
 
     /*
     int n = 200;

@@ -85,9 +85,9 @@ void metric_vec2coordb_schw_ks(double *x, double *uc, double *u, void *args)
     u[2] = r * uo[2];
     u[3] = r*sint * uo[3];
 
-    double u2 = u[0]*u[0]*(-1-2*M/r) + 4*M/r*u[0]*u[1] + u[1]*u[1]*(1-2*M/r)
-                + u[2]*u[2]/(r*r) + u[3]*u[3]/(r*r*sint*sint);
-    printf("norm: %g\n", u2);
+    //double u2 = u[0]*u[0]*(-1-2*M/r) + 4*M/r*u[0]*u[1] + u[1]*u[1]*(1-2*M/r)
+    //            + u[2]*u[2]/(r*r) + u[3]*u[3]/(r*r*sint*sint);
+    //printf("norm: %g\n", u2);
 }
 
 int metric_shadow_schw_ks(double *x, void *args)

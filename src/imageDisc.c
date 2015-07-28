@@ -71,15 +71,16 @@ void imageDisc(double center[], double n[], double width, double height,
             double t1 = -10.0 * l;
             double dt0 = -l/1000.0;
 
-            printf("xc = %g %g %g %g\n", xc[0], xc[1], xc[2], xc[3]);
-            printf("x  = %g %g %g %g\n", x[0], x[1], x[2], x[3]);
-            printf("uc = %g %g %g %g\n", uc[0], uc[1], uc[2], uc[3]);
-            printf("u  = %g %g %g %g\n", u[0], u[1], u[2], u[3]);
+            //printf("xc = %g %g %g %g\n", xc[0], xc[1], xc[2], xc[3]);
+            //printf("x  = %g %g %g %g\n", x[0], x[1], x[2], x[3]);
+            //printf("uc = %g %g %g %g\n", uc[0], uc[1], uc[2], uc[3]);
+            //printf("u  = %g %g %g %g\n", u[0], u[1], u[2], u[3]);
+            printf("%d %d\n", i, j);
 
             char rayname[80];
             sprintf(rayname, "ray_%d_%d.txt", i, j);
             geo_integrate_surface(x, u, x1, u1, t0, t1, dt0, 2, 0.5*M_PI, args,
-                                    &dopr54, rayname);
+                                    &dopr54, NULL);
 
             int ind = 16 * (NY*i + j);
             for(k=0; k<4; k++)
