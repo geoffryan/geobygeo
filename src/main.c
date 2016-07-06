@@ -16,7 +16,7 @@ int main(int argc, char *argv[])
     metric_vec2coordb = &metric_vec2coordb_schw_ks;
     metric_shadow = &metric_shadow_schw_ks;
     
-/*   
+/* 
     metric_ig  = &metric_ig_flat_sph;
     metric_dig = &metric_dig_flat_sph;
     metric_cart2coord = &metric_cart2coord_flat_sph;
@@ -28,7 +28,7 @@ int main(int argc, char *argv[])
     
     double c[4], n[3];
 
-    double inclination = M_PI/3.0;
+    double inclination = 75.0*M_PI/180.0;
 
     c[0] = 0.0;
     c[1] = 0.0;
@@ -41,7 +41,8 @@ int main(int argc, char *argv[])
     double args[1];
     args[0] = 1.0;
 
-    imageDisc(c, n, 80.0, 80.0, 800, 800, args, "disc_im_60_schw_ks_800_800.txt");
+    imageDisc(c, n, 100.0, 100.0, 1000, 1000, args, 
+                "disc_im_90_schw_ks_1000_1000.txt");
 
     /*
     int n = 200;
