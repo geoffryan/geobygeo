@@ -1,4 +1,5 @@
 #include <math.h>
+#include "par.h"
 #include "metric.h"
 
 // Flat space metric in spherical polar coordinates.

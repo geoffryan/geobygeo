@@ -1,3 +1,4 @@
+#include "par.h"
 #include "metric.h"
 
 // Flat space metric in cartesian coordinates.

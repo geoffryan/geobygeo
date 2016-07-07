@@ -1,9 +1,12 @@
 #include <math.h>
 #include <stdlib.h>
 #include <stdio.h>
+#include "par.h"
+#include "grid.h"
 #include "geodesic.h"
 #include "metric.h"
 #include "ode.h"
+#include "imageDisc.h"
 
 void imageDisc(double center[], double n[], double width, double height, 
                 int NX, int NY, void *args, char filename[])
@@ -107,6 +110,78 @@ void imageDisc(double center[], double n[], double width, double height,
                 fprintf(f, " %.12lg", dat[ind+k]);
             fprintf(f, "\n");
         }
+    fclose(f);
+
+    free(dat);
+}
+
+void imageDiscGrid(struct Grid *g, void *args, char filename[])
+{
+    /*
+     * Tabulate the positions and 4-velocities of geodesics orginating
+     * on the equatorial plane and terminating on a plane at position center[],
+     * with normal n[], width, and height.  Geodesics are integrated backwards
+     * from an nx by ny grid on the image plane.
+     *
+     * It is implicitly assumed the image plane is located in near-flat space 
+     * and is static in the current coordinate system.  All geometrical
+     * calculations at the image plane are performed in a cartesian sense.
+     */
+
+    int i, k;
+    double N = g->N;
+
+    double *dat = (double *)malloc(16 * N * sizeof(double));
+
+    double R = g->distance;
+
+    for(i=0; i<N; i++)
+    {
+        double xc[4], x[4], x1[4], u[4], uc[4], u1[4];
+        
+        for(k=0; k<4; k++)
+        {
+            xc[k] = g->xc[4*i+k];
+            uc[k] = g->nc[4*i+k];
+        }
+
+        metric_cart2coord(xc, x, args);
+        metric_vec2coordb(x, uc, u, args);
+
+        double t0 = 0.0;
+        double t1 = -10.0 * R;
+        double dt0 = -R/1000.0;
+
+        printf("%d\n", i);
+
+        char rayname[80];
+        sprintf(rayname, "ray_%d_%d.txt", i, i);
+        geo_integrate_surface(x, u, x1, u1, t0, t1, dt0, 2, 0.5*M_PI, args,
+                                &dopr54, NULL);
+
+        int ind = 16 * i;
+        for(k=0; k<4; k++)
+        {
+            dat[ind+k] = x[k];
+            dat[ind+k+4] = u[k];
+            dat[ind+k+8] = x1[k];
+            dat[ind+k+12] = u1[k];
+        }
+    }
+
+    FILE *f = fopen(filename, "a");
+    for(i=0; i<N; i++)
+    {
+        double xi = g->xi[2*i+0];
+        double yi = g->xi[2*i+1];
+
+        int ind = 16 * i;
+
+        fprintf(f, "%d %d %.12lg %.12lg", i, i, xi, yi);
+        for(k=0; k<16; k++)
+            fprintf(f, " %.12lg", dat[ind+k]);
+        fprintf(f, "\n");
+    }
     fclose(f);
 
     free(dat);

@@ -1,5 +1,7 @@
 #include <stdio.h>
 #include <math.h>
+#include "par.h"
+#include "grid.h"
 #include "test.h"
 #include "ode.h"
 #include "metric.h"
@@ -8,26 +10,42 @@
 
 int main(int argc, char *argv[])
 {
+    if(argc != 2)
+    {
+        printf("\nusage: geobygeo parfile.par\n");
+        printf("exitting\n\n");
+        return 0;
+    }
 
-    
-    metric_ig  = &metric_ig_schw_ks;
-    metric_dig = &metric_dig_schw_ks;
-    metric_cart2coord = &metric_cart2coord_schw_ks;
-    metric_vec2coordb = &metric_vec2coordb_schw_ks;
-    metric_shadow = &metric_shadow_schw_ks;
-    
-/* 
-    metric_ig  = &metric_ig_flat_sph;
-    metric_dig = &metric_dig_flat_sph;
-    metric_cart2coord = &metric_cart2coord_flat_sph;
-    metric_vec2coordb = &metric_vec2coordb_flat_sph;
-    metric_shadow = &metric_shadow_schw_ks;
-*/
+    struct parList pars = PAR_DEFAULT;
+    struct Grid grid = GRID_DEFAULT;
+    read_pars(&pars, argv[1]);
+    print_pars(&pars, NULL);
 
+    int err = 0;
+    err += setup_metric(&pars);
+    err += setup_grid(&grid, &pars);
 
-    
+    if(err != 0)
+    {
+        printf("\nbad setup\n");
+        printf("exitting\n\n");
+        free_grid(&grid);
+        return 0;
+    }
+
+    FILE *f = fopen("disc_im_grid.txt", "w");
+    fclose(f);
+    print_pars(&pars, "disc_im_grid.txt");
+
+    double args[1];
+    args[0] = 1.0;
+    imageDiscGrid(&grid, args, "disc_im_grid.txt");
+
+    free_grid(&grid);
+
+    /*
     double c[4], n[3];
-
     double inclination = 75.0*M_PI/180.0;
 
     c[0] = 0.0;
@@ -38,12 +56,9 @@ int main(int argc, char *argv[])
     n[1] = 1.0 * cos(inclination);
     n[2] = 1.0 * sin(inclination);
 
-    double args[1];
-    args[0] = 1.0;
-
-    imageDisc(c, n, 100.0, 100.0, 1000, 1000, args, 
-                "disc_im_90_schw_ks_1000_1000.txt");
-
+    imageDisc(c, n, 100.0, 100.0, 10, 10, args, 
+                "disc_im_90_schw_ks_10_10.txt");
+    */
     /*
     int n = 200;
     double x0[4], u0[4], x[4], u[4];

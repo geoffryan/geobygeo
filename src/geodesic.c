@@ -1,5 +1,6 @@
 #include <stdio.h>
 #include <stdlib.h>
+#include "par.h"
 #include "metric.h"
 #include "ode.h"
 #include "output.h"
@@ -22,7 +23,7 @@ void geo_dHdP(double t, double *x, double *u, void *args, double *xdot)
     // The first part of Hamilton's equations: dq/dt = dH/dp.  Simplifies
     // to dx^\mu/dt = u^\mu.  Fills 'xdot' with the current values of dx/dt.
 
-    double *g = (double *)malloc(16 * sizeof(double));
+    double g[16];
     metric_ig(g, x, args);
 
     int i,j;
@@ -33,8 +34,6 @@ void geo_dHdP(double t, double *x, double *u, void *args, double *xdot)
         for(j=0; j<4; j++)
             xdot[i] += g[4*i+j]*u[j];
     }
-
-    free(g);
 }
 
 void geo_dHdQ(double t, double *x, double *u, void *args, double *udot)
@@ -43,7 +42,7 @@ void geo_dHdQ(double t, double *x, double *u, void *args, double *udot)
     // to d u_\mu/dt = -1/2 * u_\nu * u_\rho * d_\mu g^{\nu\rho}.  
     // Fills 'udot' with the current values of du/dt.
 
-    double *dg = (double *)malloc(64 * sizeof(double));
+    double dg[64];
     metric_dig(dg, x, args);
 
     int i,j,k;
@@ -56,8 +55,6 @@ void geo_dHdQ(double t, double *x, double *u, void *args, double *udot)
                 udot[i] += dg[16*i+4*j+k]*u[j]*u[k];
         udot[i] *= -0.5;
     }
-
-    free(dg);
 }
 
 void geo_xudot(double t, double *xu, void *args, double *xudot)
@@ -174,7 +171,7 @@ void geo_integrate_surface(double *x0, double *u0, double *x, double *u,
         double g[16];
         metric_ig(g, xu, args);
         double sum = 0.0;
-        double sum2 = xu[4]*xu[4]*g[0];
+        //double sum2 = xu[4]*xu[4]*g[0];
         for(i=1; i<4; i++)
             for(j=1; j<4; j++)
                 sum += g[4*i+j]*xu[4+i]*xu[4+j];

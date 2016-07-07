@@ -1,5 +1,6 @@
 #include <math.h>
 #include <stdio.h>
+#include "par.h"
 #include "metric.h"
 
 // Schwarzschild metric in spherical schwarzschild coordinates.

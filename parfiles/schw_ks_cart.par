@@ -1,0 +1,11 @@
+Metric      0
+Grid        0
+N1          10
+N2          10
+X1a         -50.0
+X1b         50.0
+X2a         -50.0
+X2b         50.0
+distance    1.4e5
+inclination 15.0
+azimuth     90.0
