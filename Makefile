@@ -28,6 +28,10 @@ endif
 ifeq ($(strip $(USE_OPT)), 1)
 	CFLAGS += $(OPT)
 endif
+ifeq ($(strip $(USE_OMP)), 1)
+	CFLAGS += -DUSEOMP $(OMP_FLAG)
+	LDFLAGS += $(OMP_FLAG)
+endif
 
 
 .PHONY: all clean distclean

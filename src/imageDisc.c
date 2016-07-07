@@ -1,3 +1,6 @@
+#ifdef USEOMP
+#include <omp.h>
+#endif
 #include <math.h>
 #include <stdlib.h>
 #include <stdio.h>
@@ -128,15 +131,19 @@ void imageDiscGrid(struct Grid *g, void *args, char filename[])
      * calculations at the image plane are performed in a cartesian sense.
      */
 
-    int i, k;
-    double N = g->N;
+    int N = g->N;
 
     double *dat = (double *)malloc(16 * N * sizeof(double));
 
     double R = g->distance;
 
+    int i;
+#ifdef USEOMP
+    #pragma omp parallel for
+#endif
     for(i=0; i<N; i++)
     {
+        int k;
         double xc[4], x[4], x1[4], u[4], uc[4], u1[4];
         
         for(k=0; k<4; k++)
@@ -169,15 +176,19 @@ void imageDiscGrid(struct Grid *g, void *args, char filename[])
         }
     }
 
+    int N1 = g->N1;
+    int N2 = g->N2;
+
     FILE *f = fopen(filename, "a");
     for(i=0; i<N; i++)
     {
+        int k;
         double xi = g->xi[2*i+0];
         double yi = g->xi[2*i+1];
 
         int ind = 16 * i;
 
-        fprintf(f, "%d %d %.12lg %.12lg", i, i, xi, yi);
+        fprintf(f, "%d %d %.12lg %.12lg", i/N1, i%N2, xi, yi);
         for(k=0; k<16; k++)
             fprintf(f, " %.12lg", dat[ind+k]);
         fprintf(f, "\n");

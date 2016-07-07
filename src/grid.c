@@ -194,7 +194,7 @@ void grid_generate_elps(struct Grid *g)
             xi[2*(Np*i+j) + 0] = r;
             xi[2*(Np*i+j) + 1] = phi;
 
-            printf("%g, %g\n", X, Y);
+            //printf("%g, %g, %g, %g\n", X, Y, r, phi);
 
             xc[4*(Np*i+j)+0] = 0.0;
             xc[4*(Np*i+j)+1] = c[0] + X*nx[0] + Y*ny[0];

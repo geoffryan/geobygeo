@@ -1,0 +1,11 @@
+Metric      3
+Grid        1
+N1          100
+N2          40
+X1a         2.0
+X1b         400.0
+X2a         0.0
+X2b         1.0
+distance    1.0e6
+inclination 45.0
+azimuth     0.0
