@@ -188,7 +188,7 @@ void imageDiscGrid(struct Grid *g, void *args, char filename[])
 
         int ind = 16 * i;
 
-        fprintf(f, "%d %d %.12lg %.12lg", i/N1, i%N2, xi, yi);
+        fprintf(f, "%d %d %.12lg %.12lg", i/N2, i%N2, xi, yi);
         for(k=0; k<16; k++)
             fprintf(f, " %.12lg", dat[ind+k]);
         fprintf(f, "\n");
