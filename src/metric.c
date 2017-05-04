@@ -14,6 +14,7 @@ int setup_metric(struct parList *pars)
         metric_cart2coord = &metric_cart2coord_flat_cart;
         metric_vec2coordb = &metric_vec2coordb_flat_cart;
         metric_shadow = &metric_shadow_flat_cart;
+        metric_fix_domain = &metric_fix_domain_flat_cart;
     }
     else if(choice == 1)
     {
@@ -22,6 +23,7 @@ int setup_metric(struct parList *pars)
         metric_cart2coord = &metric_cart2coord_flat_sph;
         metric_vec2coordb = &metric_vec2coordb_flat_sph;
         metric_shadow = &metric_shadow_flat_sph;
+        metric_fix_domain = &metric_fix_domain_flat_sph;
     }
     else if(choice == 2)
     {
@@ -30,6 +32,7 @@ int setup_metric(struct parList *pars)
         metric_cart2coord = &metric_cart2coord_schw_sc;
         metric_vec2coordb = &metric_vec2coordb_schw_sc;
         metric_shadow = &metric_shadow_schw_sc;
+        metric_fix_domain = &metric_fix_domain_schw_sc;
     }
     else if(choice == 3)
     {
@@ -38,6 +41,7 @@ int setup_metric(struct parList *pars)
         metric_cart2coord = &metric_cart2coord_schw_ks;
         metric_vec2coordb = &metric_vec2coordb_schw_ks;
         metric_shadow = &metric_shadow_schw_ks;
+        metric_fix_domain = &metric_fix_domain_schw_ks;
     }
     else
     {

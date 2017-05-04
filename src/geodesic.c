@@ -160,6 +160,7 @@ void geo_integrate_surface(double *x0, double *u0, double *x, double *u,
             xu0[i] = xu[i];
 
         dt0 = step(t, xu, &dt, 8, args, &geo_xudot);
+        metric_fix_domain(&(xu[0]), &(xu[4]), args);
         t += dt0;
 
         if(filename != NULL)

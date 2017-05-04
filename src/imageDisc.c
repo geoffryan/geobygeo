@@ -136,6 +136,8 @@ void imageDiscGrid(struct Grid *g, void *args, char filename[])
     double *dat = (double *)malloc(16 * N * sizeof(double));
 
     double R = g->distance;
+    int N1 = g->N1;
+    int N2 = g->N2;
 
     int i;
 #ifdef USEOMP
@@ -162,7 +164,7 @@ void imageDiscGrid(struct Grid *g, void *args, char filename[])
         printf("%d\n", i);
 
         char rayname[80];
-        sprintf(rayname, "ray_%d_%d.txt", i, i);
+        sprintf(rayname, "ray_%04d_%04d.txt", i/N2, i%N2);
         geo_integrate_surface(x, u, x1, u1, t0, t1, dt0, 2, 0.5*M_PI, args,
                                 &dopr54, NULL);
 
@@ -175,9 +177,6 @@ void imageDiscGrid(struct Grid *g, void *args, char filename[])
             dat[ind+k+12] = u1[k];
         }
     }
-
-    int N1 = g->N1;
-    int N2 = g->N2;
 
     FILE *f = fopen(filename, "a");
     for(i=0; i<N; i++)

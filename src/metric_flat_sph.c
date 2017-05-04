@@ -76,3 +76,17 @@ int metric_shadow_flat_sph(double *x, void *args)
 {
     return 0;
 }
+
+int metric_fix_domain_flat_sph(double *x, double *u, void *args)
+{
+    if(x[2] < 0.0)
+    {
+        x[2] = -x[2];
+        x[3] += M_PI;
+        u[2] = -u[2];
+        return 1;
+    }
+
+    return 0;
+}
+

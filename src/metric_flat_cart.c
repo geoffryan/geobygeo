@@ -41,3 +41,9 @@ int metric_shadow_flat_cart(double *x, void *args)
 {
     return 0;
 }
+
+int metric_fix_domain_flat_cart(double *x, double *u, void *args)
+{
+    return 0;
+}
+
